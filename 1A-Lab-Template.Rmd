@@ -1,0 +1,333 @@
+---
+title: "Template DAV: Lab 1A"
+subtitle: "Data Visualization"
+author: "your name"
+output: html_document
+---
+
+
+---
+
+# Instructions
+
+1. Save the file in one of your folders
+
+2. Insert R code in R chunks
+
+3. Run the code by clicking the green right arrow at the topright of the chunk
+
+- if an assigment was made, the object appears in the Global Environment 
+    
+- if output was requested, it should appear in the Rmd file  below the R chunk
+    
+- if an error message appears, adapt the code until it the error meassage dissappears
+    
+    - if the code is error free, click on the `Knit` button to render the HTML document
+
+4. To run all previous R chunks, click the downwards arrow at the top right of the R chunk
+
+---
+
+The code for the first two R chunks is given.
+
+Install and load the package `tidyverse` (click the green right arrow to check if the code works properly)
+
+```{r}
+if('tidyverse' %in% installed.packages() == FALSE) install.packages('tidyverse')
+library(tidyverse)
+```
+
+
+---
+
+The data set for the exercises is `txhousing` of the package `tidyverse`
+
+
+# `dplyr` functions
+
+
+a. __Display the variables `volume` and `inventory` using the function `select()`. Next, display all other variables by deselecting `volume` and `inventory` in the function `select()`.__
+
+(First run the code with the green right arrow. The output should appear in your Rmd document below the chunk. If there are no error mesaages, click the `Knit` button to render the HTML file)
+
+```{r}
+select(txhousing, volume, inventory)
+select(txhousing, -volume, -inventory)
+```
+
+
+If rendering the HTML file work properly, then continue with the exercises. Remember to test each chuck for errors before knitting the HTML file!
+
+---
+
+
+## `filter()`
+
+The function `filter(data=<DATA>,  <LOGICAL EXPRESSION>)` selects rows of data based on a logical expression. 
+
+b. __Display cases that had less than 10 sales in the year 2011__
+
+
+```{r}
+
+```
+
+---
+
+
+## `mutate()`
+
+The function `mutate(data=<DATA>, <NEW_VAR = EXPRESSION>)` computes a new variable and adds it to the data.
+
+c. __Compute the logarithm of the variable `volume` unde  the name `log_volume`. Display the new data set without saving it.__
+
+
+```{r}
+
+```
+
+---
+
+## `summarise()`
+
+The function `summarise(data=<DATA>, <STAT = function(<VARIABLE>))` computes summary statistics with functions like `mean()` and `sd()`, or  `n()` (see the section Summary Functions on the `dplyr` cheat sheet). `STAT` is a user-supplied name for the summary statistic.
+
+c. __Display the means and standard deviations of the variables `volume` and `sales`. Supply appropriate names.__
+
+
+
+```{r}
+
+```
+
+---
+
+## The pipe operator 
+
+
+
+h. __Select cases with `sales > 450`, compute the variable `log_sales` as logarithm of `sales`, and display the means (M), standard deviations (SD) and number of observations (Freq) of `log_sales`.__
+
+
+```{r}
+
+```
+
+---
+
+## `group_by ()`
+
+
+The function `group_by(data=<DATA>, <VARIABLE(S)>)` groups the data by the value(s) of one or more variables [r4ds: Grouped summaries with `summarise()`](https://r4ds.had.co.nz/transform.html#grouped-summaries-with-summarise). It is especially useful in combination  with `summarise()`
+
+i. __Repeat the previous exercise, but now display the means, standard deviations and number of observations per city.__
+
+
+```{r}
+
+```
+
+---
+
+## `arrange()`
+
+The function `arrange(data=<DATA>, <VARIABLE(S)>)` sorts the rows of the data by variable(s) in `<VARIABLE>` [r4ds: Arrange rows with `arrange()`](https://r4ds.had.co.nz/transform.html#arrange-rows-with-arrange). It is also useful in combination with `summarise()`.
+
+j. __Repeat the previous exercise, but now sort the output on the means of the cities.__
+
+
+```{r}
+
+```
+
+---
+
+
+
+
+# `ggplot2` function
+
+Use the [Data Visualization Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf) and the [Tidyverse ggplot2 Reference](https://ggplot2.tidyverse.org/reference/) as a reference for the exercises, and check [r4ds: Data visualisation](https://r4ds.had.co.nz/data-visualisation.html) for examples of `ggplot2` code. 
+
+
+In this lab we use the dataset `txhousing`. Check the help page for the content of this data set.
+
+
+## Data
+
+The basic function for making plots with `ggplot2` is  
+
+```
+ggplot(data = <DATA>) 
+```
+
+where `<DATA>` is the name of the data set. 
+
+
+a. __Display the plot that is produced by the function `ggplot()` with the `data = txhousing` argument. __
+
+
+```{r}
+
+```
+
+---
+
+
+## Aesthetics
+
+
+Without an aesthetics specification the plot is empty. To assign values to the axes a `mapping` argument is required in which the aesthetics are specified. The generic code for that   
+
+```
+ggplot(data = <DATA>, mapping = aes(x = <VARIABLE>, y = <VARIABLE>, . . .)) 
+```
+
+where the aesthetic function `aes()` tells `ggplot()` which variables to map to the x- and y-axis. The dots mean that there are other aesthetics, like `alpha` , `color` and `fill`. We will encounter examples of these aesthetics later in the lab. 
+
+b. __Run the `ggplot()` function again, but now with `aes()` specified such that `volume` is mapped to the x-axis and `sales` to the y-axis. __
+
+
+```{r}
+
+```
+
+---
+ 
+
+
+
+## Geoms
+
+The axes now have values, but nothing is plotted. The `<GEOM_FUNCTION>` determines what is to be plotted, e.g. `geom_point()` for points, `geom_smooth()` for smooth regression lines, `geom_histogram()` for a histogram, etc. It is possible to add more than one geom to a plot.
+
+There are two ways to specify the aesthetics in combination with a geom. When specified in the `ggplot()` function like
+
+```
+ggplot(data = <DATA>, mapping = aes(x = <VARIABLE>, y = <VARIABLE>)) + 
+   <GEOM_FUNCTION>()
+```
+
+the mappings are the default for all following layers. However, if specified as  
+
+```
+ggplot(data = <DATA>) + 
+   <GEOM_FUNCTION>(mapping = aes(x = <VARIABLE>, y = <VARIABLE>))
+```
+
+the mappings only refer to that specific geom.
+
+---
+
+We will now make some plots of the variable `sales`. With a single variable the `aes()` function only requires one argument, either `x` or `y`. 
+
+a. __Display a histogram of `sales` with `geom_histogram()`. Do you map `sales` to the x- or y-axis?.__
+
+
+```{r}
+
+```
+
+The plot is accompanied by a suggestion and a warning. The default number of bins is 30, but a smaller number woud be  more appropriate. The variable `sales` is also highly skewed, so for a more evenly distribution of the bins a logarithmic transformation seems in order. Furthermore, removal of the cases with missings would get rid of the warning. 
+
+---
+
+b. __Run the code again, but remove cases with missing values with `na.omit()`, set the number of bins to 20, and plot the logarithm of sales using the function `scale_x_log10()`.__
+
+```{r}
+
+```
+
+---
+
+c. __Add another line of code to display 12 facets with a histogram of the log of sales per month.__
+
+
+```{r}
+
+```
+
+---
+
+d. __Experiment by displaying different themes for the plot.__
+
+```{r}
+
+```
+
+---
+
+
+# `ggplot2` and `dplyr`
+
+The packages `ggplot2` and `dplyr` are constructed in such a way that they cooperate prefectly. The next exercises are examples of this. The code for combining functions from the two packages is:
+
+```
+<DATA> %>% 
+   dplyr functions %>% 
+   ggplot() +
+     plot specifications 
+```
+
+Note that the `ggplot()` function no longer requires the `data` argument, because it auromatically takes the result of the pipeline as data argument.
+
+---
+
+a. __With a combination of dplyr functions, remove the cases with missing values, create the new variable `logsales` and `logvolume` with the function `log10()`, and display a scatterplot of these two variables (include the argument `alpha=0.1` to make the points in the plot transparent) . What's the difference in the scale of the x-axis compared to the histograms?__
+
+
+
+```{r}
+
+```
+
+---
+
+
+Suppose you are especially interested in the period 2010-2015.  
+
+b. __Make the same plot as before, but first use a `dplyr` function to select data from 2012-2015. Also give the points from different years another color> There is a difference if you treat `year`  as `numeric` or as `factor` (check it out!), but for now treat year as numeric.__
+
+```{r}
+
+```
+
+---
+
+The colors for year as numeric variable change from ligth to dark blue. You can change the colors with the function `scale_colour_gradient()`
+
+c. __Change the colors  in "yellow" for the first year and "red" for the last year, and check the result.__
+
+```{r}
+
+```
+
+---
+
+The relationships between the two variables seem pretty linear, so we like to add linear regression lines for each year to see if the slopes dfiffer.
+
+d. __Add the linear regression lines for each year (you need to specify year as `factor` now!) to the plot with the function `geom_smooth()`. Specify as method "lm", and suppress the display of the confidence intervals.__
+
+
+```{r}
+
+```
+
+---
+
+It can be seen that the residuals are evenly distributed over the month, so we may expect the confidence intervals to also fluctuate over the months. To get a better picture of that, we like to inspect separate plots for each year.
+
+e. __Divide the plots over four facets, one for each year, and include the confidence intervals in these plots. What do you notice about the confidence intervals? __
+
+
+```{r}
+
+```
+
+---
+
+---
+
+END OF LAB.
+
+
